@@ -1,11 +1,9 @@
 package dbgrow.com.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,11 +21,29 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 import dbgrow.com.myapplication.datastructures.Checkin;
 
+interface OnGetNonceCompleteListener {
+    void onSuccess(String nonce) throws UnsupportedEncodingException;
+
+    void onFailure(int status, String body);
+}
+
+interface OnGetCheckinsCompleteListener {
+    void onSuccess(ArrayList<Checkin> ckeckins) throws UnsupportedEncodingException;
+
+    void onFailure(int status, String body);
+}
+
+interface OnCheckinCompleteListener {
+    void onSuccess(Checkin checkin);
+
+    void onFailure(int status, String body);
+}
+
 public class SupportHTTPClient {
-    private String host = "http://192.168.1.146:3000";
-    private KeyUtils keyUtils;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     Context context;
+    private String host = "http://192.168.1.146:3000";
+    private KeyUtils keyUtils;
 
     public SupportHTTPClient(Context ctx) {
         keyUtils = new KeyUtils(ctx);
@@ -111,7 +127,7 @@ public class SupportHTTPClient {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 Log.i(getClass().getSimpleName(), "Got Checkins failure: " + statusCode);
-                listener.onFailure(statusCode,"");
+                listener.onFailure(statusCode, "");
             }
 
             @Override
@@ -180,23 +196,5 @@ public class SupportHTTPClient {
         });
 
     }
-}
-
-interface OnGetNonceCompleteListener {
-    void onSuccess(String nonce) throws UnsupportedEncodingException;
-
-    void onFailure(int status, String body);
-}
-
-interface OnGetCheckinsCompleteListener {
-    void onSuccess(ArrayList<Checkin> ckeckins) throws UnsupportedEncodingException;
-
-    void onFailure(int status, String body);
-}
-
-interface OnCheckinCompleteListener {
-    void onSuccess(Checkin checkin);
-
-    void onFailure(int status, String body);
 }
 

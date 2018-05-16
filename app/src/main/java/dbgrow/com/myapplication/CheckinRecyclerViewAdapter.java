@@ -15,7 +15,7 @@ import java.util.Date;
 import dbgrow.com.myapplication.datastructures.Checkin;
 
 public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Checkin> mDataset = new ArrayList<>();
+    private ArrayList<Checkin> checkins = new ArrayList<>();
     private PrettyTime prettyTime = new PrettyTime();
 
     // Provide a reference to the views for each data item
@@ -32,25 +32,30 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CheckinRecyclerViewAdapter(ArrayList<Checkin> myDataset) {
-        if (myDataset != null) {
-            mDataset.addAll(myDataset);
+    public CheckinRecyclerViewAdapter(ArrayList<Checkin> initCheckins) {
+        if (initCheckins != null) {
+            checkins.addAll(initCheckins);
             notifyDataSetChanged();
         }
     }
 
     public void addCheckins(ArrayList<Checkin> checkins) {
         if (checkins != null) {
-            mDataset.addAll(checkins);
-            notifyItemInserted(mDataset.size() - 1);
+            this.checkins.addAll(checkins);
+            notifyItemInserted(this.checkins.size() - 1);
         }
     }
 
     public void addCheckin(Checkin checkin) {
         if (checkin != null) {
-            mDataset.add(checkin);
-            notifyItemInserted(mDataset.size() - 1);
+            checkins.add(checkin);
+            notifyItemInserted(checkins.size() - 1);
         }
+    }
+
+    public void clearCheckins(){
+        checkins.clear();
+        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)
@@ -65,7 +70,7 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Checkin checkin = mDataset.get(position);
+        Checkin checkin = checkins.get(position);
         TextView message = holder.view.findViewById(R.id.message);
         if (checkin.message != null) {
             message.setText(checkin.message);
@@ -91,6 +96,6 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return checkins.size();
     }
 }

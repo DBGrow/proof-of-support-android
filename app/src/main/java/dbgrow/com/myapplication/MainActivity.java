@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView checkinRecycler;
     LinearLayoutManager layoutManager;
     CheckinRecyclerViewAdapter checkinRecyclerViewAdapter;
+    RelativeLayout getCheckinProgress;
+    ProgressBar submitCheckinProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getCheckinProgress = findViewById(R.id.checkin_progress);
+        submitCheckinProgress = findViewById(R.id.checkin_submit_progress);
 
         //setup recyclerview and UI
         checkinRecycler = findViewById(R.id.checkin_recycler);
         layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
         checkinRecycler.setLayoutManager(layoutManager);
 
         checkinRecyclerViewAdapter = new CheckinRecyclerViewAdapter(new ArrayList<Checkin>());
@@ -55,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText checkinMessage = findViewById(R.id.checkin_message);
 
         //buttons
-        Button checkinButton = findViewById(R.id.checkin_button);
+        final Button checkinButton = findViewById(R.id.checkin_button);
         checkinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,15 +75,24 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                checkinButton.setText("");
+                submitCheckinProgress.setVisibility(View.VISIBLE);
+
                 new SupportHTTPClient(getApplicationContext()).commitCheckin(message, new OnCheckinCompleteListener() {
                     @Override
                     public void onSuccess(Checkin checkin) {
                         checkinRecyclerViewAdapter.addCheckin(checkin);
+                        checkinButton.setText("Checkin");
+                        checkinMessage.setText(""); //clear text
+                        submitCheckinProgress.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(int status, String body) {
-
+                        checkinButton.setText("Checkin");
+                        submitCheckinProgress.setVisibility(View.GONE);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Failed to submit checkin! : " + status, Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 });
             }
@@ -111,16 +128,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        checkinRecyclerViewAdapter.clearCheckins();
+        getCheckinProgress.setVisibility(View.VISIBLE);
         new SupportHTTPClient(this).getCheckins(new OnGetCheckinsCompleteListener() {
             @Override
             public void onSuccess(ArrayList<Checkin> checkins) throws UnsupportedEncodingException {
                 Log.i(getClass().getSimpleName(), "Checkins success! " + checkins.size() + " checkins");
                 checkinRecyclerViewAdapter.addCheckins(checkins);
+                getCheckinProgress.setVisibility(View.GONE);
+
+                if (checkins.size() == 0) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to get Checkins!", Toast.LENGTH_SHORT);
+                    toast.show();
+
+                    //show the no results thing
+                    return;
+                }
+
+
+
             }
 
             @Override
             public void onFailure(int status, String body) {
                 Log.i(getClass().getSimpleName(), "Get checkins fail");
+                getCheckinProgress.setVisibility(View.GONE);
+                Toast toast = Toast.makeText(getApplicationContext(), "Failed to get Checkins!", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }

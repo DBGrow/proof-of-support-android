@@ -43,6 +43,19 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <RelativeLayout
+        android:id="@+id/checkin_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/checkin_recycler"
+        android:layout_alignTop="@id/checkin_recycler">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/checkin_recycler"
         android:layout_width="match_parent"
@@ -72,6 +85,17 @@
             android:layout_marginRight="6dp"
             android:text="Checkin" />
 
+        <ProgressBar
+            android:id="@+id/checkin_submit_progress"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@id/checkin_button"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="34dp"
+            android:elevation="2dp"
+            android:visibility="gone"
+            />
+
         <EditText
             android:id="@+id/checkin_message"
             android:layout_width="match_parent"
@@ -79,7 +103,7 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_toLeftOf="@id/checkin_button"
-            android:hint="Type a checkin message!"/>
+            android:hint="Type a checkin message!" />
 
     </RelativeLayout>
 

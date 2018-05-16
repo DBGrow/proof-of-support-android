@@ -48,6 +48,7 @@ public class SupportHTTPClient {
     public SupportHTTPClient(Context ctx) {
         keyUtils = new KeyUtils(ctx);
         context = ctx;
+        host = getIP(context);
     }
 
     static String getIP(Context context) {
@@ -67,7 +68,7 @@ public class SupportHTTPClient {
     public void getNonce(final OnGetNonceCompleteListener listener) {
         AsyncHttpClient client = new AsyncHttpClient();
         Log.i(getClass().getSimpleName(), "Getting nonce...");
-        client.get(host + "/nonce", new AsyncHttpResponseHandler() {
+        client.get("http://"+host + ":3000/nonce", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -89,7 +90,7 @@ public class SupportHTTPClient {
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 Log.i(getClass().getSimpleName(), "Got nonce failure: " + statusCode);
-                listener.onFailure(statusCode, new String(errorResponse));
+                listener.onFailure(statusCode, "");
             }
 
             @Override
@@ -102,7 +103,7 @@ public class SupportHTTPClient {
     public void getCheckins(final OnGetCheckinsCompleteListener listener) {
         AsyncHttpClient client = new AsyncHttpClient();
         Log.i(getClass().getSimpleName(), "Getting checkins...");
-        client.get(host + "/checkins", new AsyncHttpResponseHandler() {
+        client.get("http://"+host + ":3000/checkins", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {

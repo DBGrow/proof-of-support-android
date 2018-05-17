@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -37,6 +38,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        ImageView back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         String ip_string = SupportHTTPClient.getIP(this);
 
         final EditText ip = findViewById(R.id.ip);
@@ -50,9 +59,13 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ip_address = ip.getText().toString();
                 //set to permanent storage
-                SupportHTTPClient.setIP(getApplicationContext(), ip_address);
+                if (SupportHTTPClient.setIP(getApplicationContext(), ip_address)) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Set IP " + ip_address + "!", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
 
-                Toast toast = Toast.makeText(getApplicationContext(), "Set IP " + ip_address + "!", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), "Not an IP: " + ip_address, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });

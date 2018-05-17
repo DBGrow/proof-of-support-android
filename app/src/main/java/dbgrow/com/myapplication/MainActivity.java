@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         keyUtils = new KeyUtils(this);
@@ -105,16 +106,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        //check if we have keys, if not then generate
+        //check if west have keys, if not then generate
         ArrayList<String> fileList = new ArrayList<>(Arrays.asList(fileList()));
 
         if (!fileList.contains("private.pem")) {
             Log.i(getClass().getSimpleName(), "Did not contain private key! Generating...");
             keyUtils.generateKeys();
             Log.i(getClass().getSimpleName(), "Done!");
-        } else {
-//            Log.i(getClass().getSimpleName(), "Found Keys!");
-
         }
 
         try {
@@ -129,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        //start services
+        Intent intent = new Intent(this, CheckinService.class);
+        startService(intent);
+
         checkinRecyclerViewAdapter.clearCheckins();
         getCheckinProgress.setVisibility(View.VISIBLE);
         new SupportHTTPClient(this).getCheckins(new OnGetCheckinsCompleteListener() {
@@ -139,15 +141,12 @@ public class MainActivity extends AppCompatActivity {
                 getCheckinProgress.setVisibility(View.GONE);
 
                 if (checkins.size() == 0) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to get Checkins!", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "No checkins to show!", Toast.LENGTH_SHORT);
                     toast.show();
+                    //show the no results icon
 
-                    //show the no results thing
                     return;
                 }
-
-
-
             }
 
             @Override

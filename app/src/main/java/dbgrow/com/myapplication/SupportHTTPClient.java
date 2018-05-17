@@ -40,35 +40,38 @@ interface OnCheckinCompleteListener {
 }
 
 public class SupportHTTPClient {
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    Context context;
-    private String host = "http://192.168.1.146:3000";
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Context context;
+    private String host;
     private KeyUtils keyUtils;
 
-    public SupportHTTPClient(Context ctx) {
+    SupportHTTPClient(Context ctx) {
         keyUtils = new KeyUtils(ctx);
         context = ctx;
         host = getIP(context);
     }
 
     static String getIP(Context context) {
-//        context.getSharedPreferences(Context.MODE_PRIVATE)
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         return sharedPref.getString("ip", null);
     }
 
-    static void setIP(Context context, String ip) {
+    static boolean setIP(Context context, String ip) {
+
+        if (!Util.validateIP(ip)) return false;
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("ip", ip);
         editor.commit();
+        return true;
     }
 
     public void getNonce(final OnGetNonceCompleteListener listener) {
         AsyncHttpClient client = new AsyncHttpClient();
+        client.setLoggingEnabled(false);
         Log.i(getClass().getSimpleName(), "Getting nonce...");
-        client.get("http://"+host + ":3000/nonce", new AsyncHttpResponseHandler() {
+        client.get("http://" + host + ":3000/nonce", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -102,8 +105,9 @@ public class SupportHTTPClient {
 
     public void getCheckins(final OnGetCheckinsCompleteListener listener) {
         AsyncHttpClient client = new AsyncHttpClient();
-        Log.i(getClass().getSimpleName(), "Getting checkins...");
-        client.get("http://"+host + ":3000/checkins", new AsyncHttpResponseHandler() {
+        client.setLoggingEnabled(false);
+//        Log.i(getClass().getSimpleName(), "Getting checkins...");
+        client.get("http://" + host + ":3000/checkins", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -148,7 +152,7 @@ public class SupportHTTPClient {
                 Log.i(getClass().getSimpleName(), "Got nonce for checkin: " + nonce);
 
                 AsyncHttpClient client = new AsyncHttpClient();
-
+                client.setLoggingEnabled(false);
                 String signed_nonce;
                 try {
                     signed_nonce = keyUtils.signToHexString(nonce);

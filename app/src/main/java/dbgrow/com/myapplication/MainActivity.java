@@ -1,8 +1,8 @@
 package dbgrow.com.myapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
@@ -25,13 +24,11 @@ import dbgrow.com.myapplication.datastructures.Checkin;
 public class MainActivity extends AppCompatActivity {
 
     KeyUtils keyUtils;
-
     RecyclerView checkinRecycler;
     LinearLayoutManager layoutManager;
     CheckinRecyclerViewAdapter checkinRecyclerViewAdapter;
     RelativeLayout getCheckinProgress;
     ProgressBar submitCheckinProgress;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         //setup recyclerview and UI
         checkinRecycler = findViewById(R.id.checkin_recycler);
         layoutManager = new LinearLayoutManager(this);
-        layoutManager.setStackFromEnd(true);
+//        layoutManager.setStackFromEnd(true);
+
         checkinRecycler.setLayoutManager(layoutManager);
 
         checkinRecyclerViewAdapter = new CheckinRecyclerViewAdapter(new ArrayList<Checkin>());

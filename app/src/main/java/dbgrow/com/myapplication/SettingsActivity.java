@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -25,6 +26,17 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         keyUtils = new KeyUtils(this);
+
+        TextView publicKey = findViewById(R.id.publicKey);
+        try {
+            publicKey.setText(keyUtils.getPublicKeyString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         Button public_button = findViewById(R.id.copy_pub);
 
@@ -87,4 +99,5 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

@@ -17,7 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
+            android:padding="12dp">
 
             <TextView
                 android:id="@+id/textView"
@@ -63,8 +63,9 @@
         android:layout_height="match_parent"
         android:layout_above="@id/checkin_layout"
         android:layout_below="@id/header"
+        android:layout_marginBottom="-6dp"
         android:clipToPadding="false"
-        android:padding="6dp">
+        android:padding="12dp">
 
 
     </android.support.v7.widget.RecyclerView>
@@ -75,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="6px">
+        android:layout_marginBottom="6dp">
 
         <Button
             android:id="@+id/checkin_button"
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="6dp"
+            android:layout_marginRight="9dp"
             android:text="Checkin" />
 
         <ProgressBar
@@ -100,7 +101,7 @@
             android:id="@+id/checkin_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="6dp"
             android:layout_toLeftOf="@id/checkin_button"
             android:hint="Type a checkin message!" />

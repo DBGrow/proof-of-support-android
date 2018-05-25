@@ -33,6 +33,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_alignParentRight="true"
+                
                 android:layout_centerVertical="true"
 
                 android:src="@drawable/baseline_settings_white_48" />
@@ -65,7 +66,9 @@
         android:layout_below="@id/header"
         android:layout_marginBottom="-6dp"
         android:clipToPadding="false"
-        android:padding="12dp">
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
 
     </android.support.v7.widget.RecyclerView>
@@ -74,9 +77,10 @@
     <RelativeLayout
         android:id="@+id/checkin_layout"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="6dp">
+        android:paddingBottom="6dp"
+        android:paddingTop="12dp">
 
         <Button
             android:id="@+id/checkin_button"

@@ -3,6 +3,7 @@ package dbgrow.com.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -52,9 +55,16 @@ public class MainActivity extends AppCompatActivity {
         //setup recyclerview and UI
         checkinRecycler = findViewById(R.id.checkin_recycler);
         layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setStackFromEnd(true);
+//        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
 
         checkinRecycler.setLayoutManager(layoutManager);
+/*
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                layoutManager.getOrientation());
+        checkinRecycler.addItemDecoration(dividerItemDecoration);
+*/
 
         checkinRecyclerViewAdapter = new CheckinRecyclerViewAdapter(new ArrayList<Checkin>());
         checkinRecycler.setAdapter(checkinRecyclerViewAdapter);
@@ -80,7 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 new SupportHTTPClient(getApplicationContext()).commitCheckin(message, new OnCheckinCompleteListener() {
                     @Override
                     public void onSuccess(Checkin checkin) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Checkin Success!", Toast.LENGTH_SHORT);
+                        toast.show();
+
+                        Log.i(getClass().getSimpleName(), new Gson().toJson(checkin));
                         checkinRecyclerViewAdapter.addCheckin(checkin);
+                        checkinRecycler.smoothScrollToPosition(checkinRecyclerViewAdapter.getItemCount() - 1);
+
                         checkinButton.setText("Checkin");
                         checkinMessage.setText(""); //clear text
                         submitCheckinProgress.setVisibility(View.GONE);
@@ -137,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(getClass().getSimpleName(), "Checkins success! " + checkins.size() + " checkins");
                 checkinRecyclerViewAdapter.addCheckins(checkins);
                 getCheckinProgress.setVisibility(View.GONE);
+
+                //force scroll to bottom
+                checkinRecycler.smoothScrollToPosition(checkinRecyclerViewAdapter.getItemCount() - 1);
 
                 if (checkins.size() == 0) {
                     Toast toast = Toast.makeText(getApplicationContext(), "No checkins to show!", Toast.LENGTH_SHORT);

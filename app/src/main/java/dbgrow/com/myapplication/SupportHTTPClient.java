@@ -166,7 +166,7 @@ public class SupportHTTPClient {
                 params.put("signed_nonce", signed_nonce);
                 params.put("message", message);
 
-                client.post(host + "/checkin?nonce=" + URLEncoder.encode(nonce, "utf-8") + "&signed_nonce=" + URLEncoder.encode(signed_nonce, "utf-8") + "&message=" + URLEncoder.encode(message), params, new AsyncHttpResponseHandler() {
+                client.post("http://" + host + ":3000/checkin?nonce=" + URLEncoder.encode(nonce, "utf-8") + "&signed_nonce=" + URLEncoder.encode(signed_nonce, "utf-8") + "&message=" + URLEncoder.encode(message), params, new AsyncHttpResponseHandler() {
 
                     @Override
                     public void onStart() {

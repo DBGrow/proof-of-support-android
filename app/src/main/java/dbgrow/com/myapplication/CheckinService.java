@@ -87,15 +87,18 @@ public class CheckinService extends Service {
                         if (new Date().getTime() - lastAlert > ALERT_INTERVAL_MS) { //send the notification
 
 //                            toast = Toast.makeText(getApplicationContext(), "NOTIFICATION", Toast.LENGTH_SHORT);
-//                            toast.show();
+//                            toast.shyour_iconow();
 
                             Log.i(getClass().getSimpleName(), "SENDING A NOTIFICATION!!!");
-                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                           /* NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                                     .setContentTitle("DBGrow POS")
                                     .setContentText("It's been a long time since someone has checked in!")
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground)
                                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
                             notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+                            sendAlert();*/
                         }
                     }
                 }
@@ -106,7 +109,7 @@ public class CheckinService extends Service {
                 }
             });
 
-            handler.postDelayed(this, 10000);
+            handler.postDelayed(this, 60000);
         }
     };
 

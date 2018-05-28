@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import dbgrow.com.myapplication.datastructures.Checkin;
@@ -53,7 +55,7 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
         }
     }
 
-    public void clearCheckins(){
+    public void clearCheckins() {
         checkins.clear();
         notifyDataSetChanged();
     }
@@ -69,8 +71,8 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Checkin checkin = checkins.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Checkin checkin = checkins.get(position);
         TextView message = holder.view.findViewById(R.id.message);
         if (checkin.message != null) {
             message.setText(checkin.message);
@@ -79,17 +81,34 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
         TextView name = holder.view.findViewById(R.id.name);
         if (checkin.signer != null) {
             name.setText(checkin.signer);
+        } else {
+            name.setText("[unknown]");
         }
-
 
         TextView timestamp = holder.view.findViewById(R.id.timestamp);
         if (checkin.timestamp != 0L) {
-            Date date = new Date(checkin.timestamp);
-            timestamp.setText(date.getHours() + ":" + (date.getMinutes()>9?date.getMinutes():"0"+date.getMinutes()));
-            Log.i("Times", "" + System.currentTimeMillis());
-            Log.i("Time", "" + checkin.timestamp);
-            Log.i("Time", "" + new Date(checkin.timestamp).toLocaleString());
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date(checkin.timestamp));
+
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+
+
+            timestamp.setText(month + "/" + day + " " + hour + ":" + minute);
         }
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkin.timestamp != 0L) {
+                    Toast toast = Toast.makeText(holder.view.getContext(), prettyTime.format(new Date(checkin.timestamp)), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
 
     }
 

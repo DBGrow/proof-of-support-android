@@ -113,7 +113,7 @@ public class KeyUtils {
     }
 
     public String getPublicKeyString() throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
-        return "-----BEGIN PUBLIC KEY-----" + Base64.encodeToString(getPublicKey().getEncoded(), Base64.DEFAULT) + "-----END PUBLIC KEY-----".replaceAll("\n", "");
+        return ("-----BEGIN PUBLIC KEY-----" + Base64.encodeToString(getPublicKey().getEncoded(), Base64.DEFAULT) + "-----END PUBLIC KEY-----").replaceAll("\r", "").replaceAll("\n", "");
     }
 
     public String signToHexString(String plainText) throws Exception {

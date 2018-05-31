@@ -95,7 +95,7 @@ public class CheckinRecyclerViewAdapter extends RecyclerView.Adapter<CheckinRecy
             int day = cal.get(Calendar.DAY_OF_MONTH);
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
-
+            minute = minute < 10 ? '0' + minute : minute;
 
             timestamp.setText(month + "/" + day + " " + hour + ":" + minute);
         }
